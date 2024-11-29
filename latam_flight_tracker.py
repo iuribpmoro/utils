@@ -15,16 +15,19 @@ flights_to_monitor = [
         "url": "https://www.latamairlines.com/br/pt/oferta-voos?origin=xxxxxx",
         "departure_time": "8:10",
         "min_price": 5000,
+        "name":"XXX -> XXX"
     },
     {
         "url": "https://www.latamairlines.com/br/pt/oferta-voos?origin=xxxxxx",
         "departure_time": "20:20",
         "min_price": 5000,
+        "name":"YYY <-> YYY"
     },
     {
         "url": "https://www.latamairlines.com/br/pt/oferta-voos?origin=xxxxxx",
         "departure_time": "12:30",
         "min_price": 5000,
+        "name":"ZZZ -> ZZZ"
     },
 ]
 
@@ -88,7 +91,7 @@ def monitor_flights():
                     print(f"Flight at {flight['departure_time']} - Price: {price}")
                     if price < flight["min_price"]:
                         send_discord_notification(
-                            f"🚨 Price Alert! Flight at {flight['departure_time']} is now R$ {price}, below your threshold of R$ {flight['min_price']}!"
+                            f"🚨 Price Alert! Flight {flight['name']}, departing at {flight['departure_time']}, is now R$ {price}, below your threshold of R$ {flight['min_price']}!"
                         )
                 else:
                     print(f"Flight at {flight['departure_time']} not found.")
