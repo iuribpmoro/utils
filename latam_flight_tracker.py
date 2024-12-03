@@ -59,16 +59,16 @@ def get_flight_price(url, target_departure_time):
         for flight in flights:
             try:
                 flight_info_wrapper = flight.find_element(By.CSS_SELECTOR, 
-                    "div.flightInfostyle__FlightInfoComponent-sc__sc-169zitd-1.jDjWUw")
+                    "div.flightInfostyles__FlightInfoComponent-sc__sc-edlvrg-1.cuAZoM")
                 
                 # Extract departure time
                 time_element = flight_info_wrapper.find_element(By.CSS_SELECTOR, 
-                    "div.flightInfostyle__ContainerFlightInfo-sc__sc-169zitd-3.fybJPx.flight-information span.flightInfostyle__TextHourFlight-sc__sc-169zitd-4")
+                    "div.flightInfostyles__ContainerFlightInfo-sc__sc-edlvrg-3.frOWQZ.flight-information span.flightInfostyles__TextHourFlight-sc__sc-edlvrg-4")
                 departure_time = time_element.text.strip()
                 
                 if departure_time == target_departure_time:
                     price_element = flight_info_wrapper.find_element(By.CSS_SELECTOR, 
-                        "div.flightInfostyle__AmountInfoContainer-sc__sc-169zitd-0 span.displayCurrencystyle__CurrencyAmount-sc__sc-hel5vp-2")
+                        "div.flightInfostyles__AmountInfoContainer-sc__sc-edlvrg-0 span.displayCurrencystyle__CurrencyAmount-sc__sc-hel5vp-2")
                     price_raw = price_element.get_attribute("textContent")
                     price_cleaned = price_raw.replace("\n", "").replace("\xa0", "").strip()
                     price_numeric = price_cleaned.replace("brl ", "").split(",")[0]
