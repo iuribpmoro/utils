@@ -1,4 +1,5 @@
 import time
+from datetime import datetime
 import requests
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -136,6 +137,7 @@ def monitor_flights():
             try:
                 price = get_flight_price(flight)
                 if price is not None:
+                    print(f"Current time: {datetime.now().strftime('%d-%b %H:%M:%S')}")
                     print(f"Flight with inbound time {flight['inbound_departure_time']} and outbound time {flight['outbound_departure_time']} - Price: {price}")
                     if price < flight["min_price"]:
                         send_discord_notification(
@@ -146,7 +148,7 @@ def monitor_flights():
             except Exception as e:
                 print(f"Error monitoring flight with inbound time {flight['inbound_departure_time']} and outbound time {flight['outbound_departure_time']}: {e}")
         
-        print("Waiting for 30 minutes before next check...")
+        print("Waiting for 30 minutes before next check...\n")
         time.sleep(1800)  # Wait 30 minutes
 
 if __name__ == "__main__":
