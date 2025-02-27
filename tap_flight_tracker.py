@@ -60,7 +60,7 @@ def get_flight_price_from_page(flight_results, time_to_monitor):
 def get_flight_price(flight):
     driver = webdriver.Chrome()
     driver.get(flight["url"])
-    
+            
     try:
         # Handle popup
         WebDriverWait(driver, 10).until(
@@ -76,6 +76,9 @@ def get_flight_price(flight):
         flight_results = driver.find_elements(By.TAG_NAME, "app-flight-result")
         
         outbound_price = get_flight_price_from_page(flight_results, flight["outbound_departure_time"])
+
+        if (flight["inbound_departure_time"]) == "":
+            return outbound_price
 
         # Find and scroll to the economy button
         economy_button = WebDriverWait(driver, 10).until(
@@ -104,7 +107,7 @@ def get_flight_price(flight):
         # Wait for and click the "Select return flight" button
         select_return_flight_button = WebDriverWait(driver, 10).until(
             EC.element_to_be_clickable((By.XPATH, 
-            ".//button[contains(@class, 'button-accent') and contains(text(), 'Select return flight')]"))
+            ".//button[contains(@class, 'button-accent') and contains(text(), 'Select return')]"))
         )
         driver.execute_script("arguments[0].scrollIntoView(true);", select_return_flight_button)
         time.sleep(1)
@@ -138,7 +141,7 @@ def monitor_flights():
                 price = get_flight_price(flight)
                 if price is not None:
                     print(f"Current time: {datetime.now().strftime('%d-%b %H:%M:%S')}")
-                    print(f"Flight with inbound time {flight['inbound_departure_time']} and outbound time {flight['outbound_departure_time']} - Price: {price}")
+                    print(f"Flight {flight['name']} - Price: {price}")
                     if price < flight["min_price"]:
                         send_discord_notification(
                             f"🚨 Price Alert! Flight {flight['name']}, with inbound time {flight['inbound_departure_time']} and outbound time {flight['outbound_departure_time']}, is now R$ {price}, below your threshold of R$ {flight['min_price']}!"
